@@ -2,29 +2,14 @@
 #include <string>
 using namespace std;
 
-int gcd(int a, int b, int &x, int &y) 
+int modInverse(int a, int m) 
 {
-    if (b == 0) {
-        x = 1;
-        y = 0;
-        return a;
+    a = (a % m + m) % m;
+    for (int x = 1; x < m; x++) {
+        if ((a * x) % m == 1) return x;
     }
-    int x1, y1;
-    int g = gcd(b, a % b, x1, y1);
-    x = y1;
-    y = x1 - y1 * (a / b);
-    return g;
-}
-
-int modinv(int a, int m) 
-{
-    int x, y;
-    int g = gcd(a, m, x, y);
-    if (g != 1) {
-        cout << "No modular inverse for key found" << endl;
-        exit(1);
-    }
-    return (x % m + m) % m;
+    cout << "No modular multiplicative inverse found" << endl;
+    exit(-1);
 }
 
 string encrypt(string plaintext, int a, int b) 
@@ -49,7 +34,7 @@ string encrypt(string plaintext, int a, int b)
 string decrypt(string ciphertext, int a, int b) 
 {
     string result = "";
-    int inv = modinv(a, 26);
+    int inv = modInverse(a, 26);
     for (char ch : ciphertext) {
         if (isalpha(ch)) {
             if (isupper(ch)) {
