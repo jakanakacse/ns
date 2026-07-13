@@ -1,15 +1,14 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int modinv(int a, int m) 
+int modInverse(int a, int m) 
 {
-    a = a % m;
-    for (int x = 1; x < m; ++x) {
-        if ((a * x) % m == 1)
-            return x;
+    a = (a % m + m) % m;
+    for (int x = 1; x < m; x++) {
+        if ((a * x) % m == 1) return x;
     }
-    cout << "No modular inverse of the key found" << endl;
-    exit(1);
+    cout << "No modular multiplicative inverse found" << endl;
+    exit(-1);
 }
 
 string encrypt(string plaintext, int key) 
