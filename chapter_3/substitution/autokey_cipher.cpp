@@ -1,39 +1,35 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-string encrypt(string plaintext, string key) 
+string encrypt(string plaintext, int key) 
 {
     string result = "";
-    string key_stream = key;
-    for (size_t i = 0; i < plaintext.size(); ++i) {
-        char ch = plaintext[i];
+    int curr = key;
+    for (char ch : plaintext) {
         if (isalpha(ch)) {
-            int k = toupper(key_stream[i]) - 'A';
-            char c = ((toupper(ch) - 'A' + k) % 26) + 'A';
+            int p = toupper(ch) - 'A';
+            char c = ((p + curr) % 26) + 'A';
             result += isupper(ch) ? c : tolower(c);
-            key_stream += ch;
+            curr = p;
         } else {
             result += ch;
-            key_stream += ch;
         }
     }
     return result;
 }
 
-string decrypt(string ciphertext, string key) 
+string decrypt(string ciphertext, int key) 
 {
     string result = "";
-    string key_stream = key;
-    for (size_t i = 0; i < ciphertext.size(); ++i) {
-        char ch = ciphertext[i];
+    int curr = key;
+    for (char ch : ciphertext) {
         if (isalpha(ch)) {
-            int k = toupper(key_stream[i]) - 'A';
-            char p = ((toupper(ch) - 'A' - k + 26) % 26) + 'A';
+            int c = toupper(ch) - 'A';
+            int p = (c - curr + 26) % 26 + 'A';
             result += isupper(ch) ? p : tolower(p);
-            key_stream += isupper(ch) ? p : tolower(p);
+            curr = p - 'A';
         } else {
             result += ch;
-            key_stream += ch;
         }
     }
     return result;
@@ -41,13 +37,15 @@ string decrypt(string ciphertext, string key)
 
 int main() 
 {
-    string plain, key;
-    cout << "Enter plaintext:" << endl;
+    string plain;
+    int key;
+    cout << "Enter plaintext: ";
     getline(cin, plain);
-    cout << "Enter key:" << endl;
-    getline(cin, key);
+    cout << "Enter key (integer): ";
+    cin >> key;
+    
     string cipher = encrypt(plain, key);
-    cout << "Encrypted: " << cipher << endl;
+    cout << "Ciphertext: " << cipher << endl;
     cout << "Plaintext: " << decrypt(cipher, key) << endl;
     return 0;
 }
